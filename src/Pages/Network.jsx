@@ -60,7 +60,7 @@ function Network() {
     }, []);
 
     return (
-        <div className='w-full min-h-screen bg-[#f4f2ee]'>
+        <div className='w-full min-h-screen bg-[#f4f2ee] pb-16 md:pb-0'>
             <Nav />
             <div className='w-full max-w-[700px] mx-auto mt-5 px-4 pb-10'>
 

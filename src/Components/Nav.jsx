@@ -3,16 +3,17 @@ import { GoSearch } from "react-icons/go";
 import { TiHome } from "react-icons/ti";
 import { HiUsers } from "react-icons/hi2";
 import { IoMdNotifications } from "react-icons/io";
+import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
+import { RxCross2 } from "react-icons/rx";
 import empty_profile from '../assets/empty_profile.png'
 import { useContext, useEffect, useRef, useState } from 'react';
 import { authData } from '../Context/AuthContext';
 import axios from 'axios'
-import { RxCross2 } from "react-icons/rx";
 import { useNavigate, useLocation } from 'react-router-dom';
 import { userDataContext } from '../Context/UserContext';
 
 function Nav() {
-    const { userData, setUserData, handleGetProfile, notificationCount, setNotificationCount } = useContext(userDataContext);
+    const { userData, setUserData, handleGetProfile, notificationCount, setNotificationCount, unreadMessageCount } = useContext(userDataContext);
     const { serverUrl } = useContext(authData);
     let navigate = useNavigate();
     let location = useLocation();
@@ -94,6 +95,7 @@ function Nav() {
     const navItem = (path) => location.pathname === path;
 
     return (
+        <>
         <div className='bg-white w-full h-[60px] flex items-center justify-between px-4 lg:px-8 shadow-sm sticky top-0 z-30 border-b border-gray-200'>
             <div className='flex items-center gap-2 flex-1'>
                 <div className='w-[42px] shrink-0 cursor-pointer hover:opacity-80 transition-opacity' onClick={() => navigate("/")}>
@@ -171,6 +173,20 @@ function Nav() {
                     <span className='font-medium text-[12px] mt-0.5'>Network</span>
                 </div>
                 <div
+                    className={`md:flex hidden flex-col justify-center items-center cursor-pointer px-3 py-1 rounded-md transition-colors relative ${navItem("/messaging") ? "text-[#0a66c2]" : "text-gray-600 hover:bg-gray-100"}`}
+                    onClick={() => navigate("/messaging")}
+                >
+                    <span className='relative'>
+                        <IoChatbubbleEllipsesOutline className='text-[22px]' />
+                        {unreadMessageCount > 0 &&
+                            <span className='absolute -top-1.5 -right-2 bg-red-500 text-white text-[10px] font-bold rounded-full min-w-[16px] h-[16px] flex items-center justify-center px-1'>
+                                {unreadMessageCount > 9 ? "9+" : unreadMessageCount}
+                            </span>
+                        }
+                    </span>
+                    <span className='font-medium text-[12px] mt-0.5'>Messaging</span>
+                </div>
+                <div
                     className={`md:flex hidden flex-col justify-center items-center cursor-pointer px-3 py-1 rounded-md transition-colors relative ${navItem("/notification") ? "text-[#0a66c2]" : "text-gray-600 hover:bg-gray-100"}`}
                     onClick={() => { navigate("/notification"); setNotificationCount(0); }}
                 >
@@ -222,6 +238,64 @@ function Nav() {
                 </div>
             </div>
         </div>
+
+        {/* Mobile bottom tab bar — hidden on the chat screen since Messaging has its own composer at the bottom */}
+        {location.pathname !== "/messaging" &&
+            <div className='md:hidden fixed bottom-0 left-0 w-full h-[58px] bg-white border-t border-gray-200 flex items-center justify-around z-30 shadow-[0_-1px_6px_rgba(0,0,0,0.06)]'>
+                <div
+                    className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full cursor-pointer ${navItem("/") ? "text-[#0a66c2]" : "text-gray-500"}`}
+                    onClick={() => navigate("/")}
+                >
+                    <TiHome className='text-[22px]' />
+                    <span className='text-[10px] font-medium'>Home</span>
+                </div>
+                <div
+                    className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full cursor-pointer ${navItem("/network") ? "text-[#0a66c2]" : "text-gray-500"}`}
+                    onClick={() => navigate("/network")}
+                >
+                    <HiUsers className='text-[22px]' />
+                    <span className='text-[10px] font-medium'>Network</span>
+                </div>
+                <div
+                    className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full relative cursor-pointer ${navItem("/messaging") ? "text-[#0a66c2]" : "text-gray-500"}`}
+                    onClick={() => navigate("/messaging")}
+                >
+                    <span className='relative'>
+                        <IoChatbubbleEllipsesOutline className='text-[22px]' />
+                        {unreadMessageCount > 0 &&
+                            <span className='absolute -top-1.5 -right-2 bg-red-500 text-white text-[9px] font-bold rounded-full min-w-[15px] h-[15px] flex items-center justify-center px-1'>
+                                {unreadMessageCount > 9 ? "9+" : unreadMessageCount}
+                            </span>
+                        }
+                    </span>
+                    <span className='text-[10px] font-medium'>Chat</span>
+                </div>
+                <div
+                    className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full relative cursor-pointer ${navItem("/notification") ? "text-[#0a66c2]" : "text-gray-500"}`}
+                    onClick={() => { navigate("/notification"); setNotificationCount(0); }}
+                >
+                    <span className='relative'>
+                        <IoMdNotifications className='text-[22px]' />
+                        {notificationCount > 0 &&
+                            <span className='absolute -top-1.5 -right-2 bg-red-500 text-white text-[9px] font-bold rounded-full min-w-[15px] h-[15px] flex items-center justify-center px-1'>
+                                {notificationCount > 9 ? "9+" : notificationCount}
+                            </span>
+                        }
+                    </span>
+                    <span className='text-[10px] font-medium'>Alerts</span>
+                </div>
+                <div
+                    className='flex flex-col items-center justify-center gap-0.5 flex-1 h-full text-gray-500 cursor-pointer'
+                    onClick={() => userData && handleGetProfile(userData.userName)}
+                >
+                    <div className='rounded-full w-[24px] h-[24px] overflow-hidden ring-1 ring-gray-300'>
+                        <img src={userData?.profileImage || empty_profile} alt="profile" className='w-full h-full object-cover' />
+                    </div>
+                    <span className='text-[10px] font-medium'>Me</span>
+                </div>
+            </div>
+        }
+        </>
     )
 }
 

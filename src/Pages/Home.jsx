@@ -74,7 +74,7 @@ function Home() {
   }, []);
 
   return (
-    <div className='w-full min-h-screen bg-[#f4f2ee]'>
+    <div className='w-full min-h-screen bg-[#f4f2ee] pb-16 md:pb-0'>
       {edit && <EditProfile />}
       <Nav />
       <div className='max-w-[1128px] mx-auto mt-5 flex lg:flex-row flex-col px-4 gap-5 pb-10'>

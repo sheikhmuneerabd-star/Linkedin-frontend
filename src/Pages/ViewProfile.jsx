@@ -24,7 +24,7 @@ function ViewProfile() {
     const isOwnProfile = profileData._id == userData._id;
 
     return (
-        <div className='w-full min-h-screen bg-[#f4f2ee]'>
+        <div className='w-full min-h-screen bg-[#f4f2ee] pb-16 md:pb-0'>
             {edit && <EditProfile />}
             <Nav />
             <div className='w-full max-w-[700px] mx-auto mt-5 px-4 pb-10'>
