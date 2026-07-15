@@ -2,7 +2,7 @@ import React, { createContext } from 'react'
 
 export const authData = createContext();
 function AuthContext({children}) {
-    const serverUrl = "https://linkedinbackend-ruddy.vercel.app";
+    const serverUrl = "http://localhost:8000";
     const data = {
         serverUrl
     }

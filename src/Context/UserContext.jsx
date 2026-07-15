@@ -4,7 +4,7 @@ import { authData } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
 import { io } from 'socket.io-client'
 
-export const socket = io("https://linkedinbackend-ruddy.vercel.app")
+export const socket = io("http://localhost:8000")
 export const userDataContext = createContext();
 function UserContext({children}) {
     const [userData, setUserData] = useState(null);

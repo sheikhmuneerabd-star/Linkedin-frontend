@@ -6,7 +6,7 @@ import { io } from 'socket.io-client'
 import { useNavigate } from 'react-router-dom'
 import { FiUserPlus, FiClock, FiUserCheck, FiUserX } from "react-icons/fi";
 
-const socket = io("https://linkedinbackend-ruddy.vercel.app");
+const socket = io("http://localhost:8000");
 
 function ConnectionButton({ userId }) {
     const { serverUrl } = useContext(authData);
