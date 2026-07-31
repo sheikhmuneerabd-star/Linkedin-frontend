@@ -7,7 +7,7 @@ import { userDataContext } from './Context/UserContext'
 import Network from './Pages/Network'
 import ViewProfile from './Pages/ViewProfile'
 import Notification from './Pages/Notification'
-import Messaging from './Pages/Messaging'
+import Messaging from './Pages/messaging'
 
 function App() {
   const { userData } = useContext(userDataContext);
