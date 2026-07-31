@@ -4,7 +4,10 @@ import { authData } from "./AuthContext";
 import { useNavigate } from "react-router-dom";
 import { io } from 'socket.io-client'
 
-export const socket = io("http://localhost:8000")
+// Same server URL logic as AuthContext (this file sits outside the
+// component tree, so it can't read the context directly).
+const SOCKET_URL = import.meta.env.VITE_SERVER_URL || "http://localhost:8000";
+export const socket = io(SOCKET_URL)
 export const userDataContext = createContext();
 function UserContext({children}) {
     const [userData, setUserData] = useState(null);
@@ -72,12 +75,17 @@ function UserContext({children}) {
         getPost();
     }, []);
 
-    // Register this user on the socket as soon as we know who they are,
-    // so real-time events (new posts, connection updates, notifications, messages)
-    // reach them even if they're not on a page with a ConnectionButton mounted.
+    // Registers presence and pulls in everything that depends on being logged in
+    // (posts, notifications, unread messages). This runs again whenever userData
+    // changes — crucially including the moment right after Login/SignUp succeeds,
+    // since the very first getPost()/getCurrentUser() call above happens before
+    // the user is authenticated and will have failed silently at that point.
+    // Without this, the feed stays empty right after logging in until a manual
+    // page refresh re-runs everything with a valid session.
     useEffect(() => {
         if (userData?._id) {
             socket.emit("register", userData._id);
+            getPost();
             getNotificationCount();
             refreshUnreadMessageCount();
         }
