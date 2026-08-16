@@ -6,7 +6,7 @@ import { io } from 'socket.io-client'
 import { useNavigate } from 'react-router-dom'
 import { FiUserPlus, FiClock, FiUserCheck, FiUserX } from "react-icons/fi";
 
-const socket = io("https://linkedin-backend-henna.vercel.app", {
+const socket = io("linkedin-backend-production-2e3f.up.railway.app", {
   transports: ["websocket"],
   withCredentials: true
 });
