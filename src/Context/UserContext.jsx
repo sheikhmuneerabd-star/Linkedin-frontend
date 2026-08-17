@@ -6,7 +6,7 @@ import { io } from 'socket.io-client'
 
 // Same server URL logic as AuthContext (this file sits outside the
 // component tree, so it can't read the context directly).
-const SOCKET_URL = import.meta.env.VITE_SERVER_URL || "https://linkedin-backend-production-2e3f.up.railway.app";
+const SOCKET_URL = import.meta.env.VITE_SERVER_URL || "https://linkedin-backend-henna.vercel.app";
 export const socket = io(SOCKET_URL)
 export const userDataContext = createContext();
 function UserContext({children}) {
